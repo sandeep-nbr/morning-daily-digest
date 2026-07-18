@@ -40,6 +40,13 @@ Claude Code session and has it:
   the digest is currently delivered via the Microsoft Outlook connector instead. If you
   want delivery to switch back to Gmail, re-authenticate it in the Zapier connector
   settings.
+- **Attachment delivery**: the Zapier email-send tools' `file` param cannot read a local
+  sandbox file path — passing one silently produces a corrupted few-hundred-byte `.txt`
+  attachment with no error (discovered 2026-07-18). The working method: commit the day's
+  `.docx` to `digests/` on this branch (this repo is public), then pass its
+  `raw.githubusercontent.com` URL as the attachment source. Always verify the sent
+  message's attachment `contentType`/size afterward (via `microsoft_outlook_find_emails`
+  or the Gmail equivalent) before treating the send as successful.
 - **Environment**: the sandbox this runs in only ships `libreoffice-core` and no
   `docx` npm package or `pandoc`/`poppler-utils` by default. Each run installs what it
   needs (`npm install docx`, `apt-get install -y libreoffice-writer pandoc poppler-utils`)
